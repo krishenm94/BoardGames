@@ -1,5 +1,4 @@
-from board.board import Board, Result
-from board.board import PlayerTurn
+from board.board import Board, Result, PlayerTurn
 
 from enum import IntEnum
 import numpy as np
@@ -15,7 +14,7 @@ SIZE = 3
 
 
 class TicTacToe(Board):
-    """docstring for TicTacToe"""
+    """Player One is X and Two is O"""
 
     def __init__(self, cells=None, shape=(SIZE, SIZE)):
         super(TicTacToe, self).__init__(shape, cells)
