@@ -1,5 +1,5 @@
 from player import Player
-from board.board import Board, Cell, Result
+from board.board import Board, PlayerTurn, Result
 from random_player import Random
 
 import torch
@@ -139,7 +139,7 @@ class QNeural(Player):
 
         while not board.is_game_over():
             player = o_player
-            if board.whose_turn() == Cell.X:
+            if board.whose_turn() == PlayerTurn.One:
                 player = x_player
 
             if player is self:

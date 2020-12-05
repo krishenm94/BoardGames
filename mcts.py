@@ -1,6 +1,6 @@
 from player import Player
 from cache import Cache1
-from board.board import Board, Result, Cell
+from board.board import Board, Result, PlayerTurn
 
 from math import sqrt, inf, log
 from tqdm import trange
@@ -87,7 +87,7 @@ class Mcts(Player):
 
         return self.create_node(new_board)
 
-    def train(self, board=Board(), playouts=PLAYOUTS):
+    def train(self, board, playouts=PLAYOUTS):
         print(f"Performing {playouts} playouts.")
 
         sleep(0.05)
@@ -121,9 +121,9 @@ class Mcts(Player):
                 raise ValueError("Illegal game state.")
 
     def is_win(self, turn, result):
-        return turn == Cell.X and result == Result.O_Wins or \
-               turn == Cell.O and result == Result.X_Wins
+        return turn == PlayerTurn.One and result == Result.Two_Wins or \
+               turn == PlayerTurn.Two and result == Result.One_Wins
 
     def is_loss(self, turn, result):
-        return turn == Cell.X and result == Result.X_Wins or \
-               turn == Cell.O and result == Result.O_Wins
+        return turn == PlayerTurn.One and result == Result.One_Wins or \
+               turn == PlayerTurn.Two and result == Result.Two_Wins

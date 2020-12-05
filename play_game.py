@@ -6,10 +6,10 @@ import time
 
 PRINT = False
 
-def play_game(x_player, o_player):
+
+def play_game(x_player, o_player, board):
     x_player.set_turn(1)
     o_player.set_turn(2)
-    board = Board()
 
     while not board.is_game_over():
         player = o_player
@@ -27,10 +27,10 @@ def play_game(x_player, o_player):
     return board
 
 
-def play_games(total_games, x_player, o_player):
+def play_games(total_games, x_player, o_player, board):
     results = {
-        Result.X_Wins: 0,
-        Result.O_Wins: 0,
+        Result.One_Wins: 0,
+        Result.Two_Wins: 0,
         Result.Draw: 0
     }
 
@@ -39,7 +39,7 @@ def play_games(total_games, x_player, o_player):
 
     time.sleep(0.05) # Ensures no collisions between tqdm prints and main prints
     for _ in trange(total_games):
-        end_of_game = (play_game(x_player, o_player))
+        end_of_game = (play_game(x_player, o_player, board.copy()))
         result = end_of_game.get_game_result()
         results[result] += 1
 
@@ -47,7 +47,7 @@ def play_games(total_games, x_player, o_player):
     o_wins_percent = results[Result.Two_Wins] / total_games * 100
     draw_percent = results[Result.Draw] / total_games * 100
 
-    print(f"x wins: {x_wins_percent:.2f}%")
-    print(f"o wins: {o_wins_percent:.2f}%")
-    print(f"draw  : {draw_percent:.2f}%")
+    print(f"Player 1 Wins: {x_wins_percent:.2f}%")
+    print(f"Player 2 Wins: {o_wins_percent:.2f}%")
+    print(f"Draw  : {draw_percent:.2f}%")
     print("")

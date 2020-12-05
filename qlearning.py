@@ -1,6 +1,6 @@
 from player import Player
 from cache import Cache1
-from board.board import Board, Result, Cell
+from board.board import Board, Result, PlayerTurn
 from random_player import Random
 
 import numpy as np
@@ -110,13 +110,13 @@ class QLearning(Player):
     def play_training_game(self, opponent, epsilon):
         move_history = deque()
         board = Board()
-        x_player = self if self.turn == 1 else opponent
-        o_player = self if self.turn == 2 else opponent
+        player_one = self if self.turn == 1 else opponent
+        player_two = self if self.turn == 2 else opponent
 
         while not board.is_game_over():
-            player = o_player
-            if board.whose_turn() == Cell.X:
-                player = x_player
+            player = player_two
+            if board.whose_turn() == PlayerTurn.One:
+                player = player_one
 
             if player is self:
                 board = self.training_move(board, epsilon, move_history)
@@ -172,10 +172,10 @@ class QLearning(Player):
         if game_result == Result.Draw:
             return 1
 
-        if game_result == Result.X_Wins:
+        if game_result == Result.One_Wins:
             return 1 if self.turn == 1 else -1
 
-        if game_result == Result.O_Wins:
+        if game_result == Result.Two_Wins:
             return 1 if self.turn == 2 else -1
 
         assert False, "Undefined behaviour"

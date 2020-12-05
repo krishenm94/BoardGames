@@ -1,6 +1,5 @@
 from player import Player
 from cache import Cache1
-from board.board import Cell
 import time
 
 
@@ -60,4 +59,4 @@ class Minimax(Player):
         return min_or_max(move_values)
 
     def min_or_max(self, board):
-        return min if board.whose_turn() == Cell.O else max
+        return min if board.moves_made % 2 == 1 else max

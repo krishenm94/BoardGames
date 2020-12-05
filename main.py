@@ -6,7 +6,7 @@ from mcts import Mcts
 from human import Human
 from qneural import QNeural
 from abpruning import ABPruning
-
+from board.tictactoe import TicTacToe
 from torch.nn import MSELoss
 
 human = Human()
@@ -28,10 +28,13 @@ ab_pruning = ABPruning()
 
 # play_game(human, ab_pruning)
 # play_game(ab_pruning, human)
-play_games(1000, ab_pruning, random)
-play_games(1000, random, ab_pruning)
-play_games(1, minimax, ab_pruning)
-play_games(1, ab_pruning, minimax)
+
+# play_games(100, ab_pruning, random, TicTacToe())
+# play_games(100, random, ab_pruning, TicTacToe())
+# play_games(100, minimax, ab_pruning, TicTacToe())
+# play_games(100, ab_pruning, minimax, TicTacToe())
+play_games(100, minimax, random, TicTacToe())
+play_games(100, random, minimax, TicTacToe())
 
 # neural.games = 0
 # neural.train(2)

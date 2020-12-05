@@ -1,13 +1,15 @@
 from board.board import Board, Result
-from board.board import Player
+from board.board import PlayerTurn
 
 from enum import IntEnum
 import numpy as np
+
 
 class Cell(IntEnum):
     Empty = 0
     O = -1  # player 2
     X = 1  # player 1
+
 
 SIZE = 3
 
@@ -15,7 +17,7 @@ SIZE = 3
 class TicTacToe(Board):
     """docstring for TicTacToe"""
 
-    def __init__(self, shape, cells=None):
+    def __init__(self, cells=None, shape=(SIZE, SIZE)):
         super(TicTacToe, self).__init__(shape, cells)
         if cells is None:
             self.cells = np.array([Cell.Empty] * shape[0] * shape[1])
@@ -27,7 +29,7 @@ class TicTacToe(Board):
         return
 
     def get_cell_for_turn(self):
-        if self.whose_turn() == Player.One:
+        if self.whose_turn() == PlayerTurn.One:
             return Cell.X
         else:
             return Cell.O
@@ -89,3 +91,6 @@ class TicTacToe(Board):
         num_rows = cells_2d.shape[0]
         return ([row for row in cells_2d[range(num_rows), :]]
                 + [cells_2d.diagonal()])
+
+    def copy(self):
+        return TicTacToe(self.cells)

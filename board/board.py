@@ -1,7 +1,8 @@
 from enum import IntEnum
 import numpy as np
 
-class Player(IntEnum):
+
+class PlayerTurn(IntEnum):
     One = 1,
     Two = 2
 
@@ -18,6 +19,7 @@ class Board(object):
 
     def __init__(self, shape, cells=None):
         super(Board, self).__init__()
+
         self.shape = shape
         if cells is not None:
             self.cells = cells.copy()
@@ -33,7 +35,7 @@ class Board(object):
 
     def whose_turn(self):
         non_zero_count = np.count_nonzero(self.cells)
-        return Player.Two if (non_zero_count % 2 == 0) else Player.One
+        return PlayerTurn.Two if (non_zero_count % 2 == 0) else PlayerTurn.One
 
     def get_valid_moves(self):
         return [i for i in range(self.cells.size)
@@ -44,7 +46,7 @@ class Board(object):
                 if self.cells[i] != 0]
 
     def simulate_turn(self, move):
-        new_board = Board(self.cells)
+        new_board = self.copy()
         new_board.execute_turn(move)
         return new_board
 
@@ -81,3 +83,6 @@ class Board(object):
 
     def get_game_result(self):
         return Result.Incomplete
+
+    def copy(self):
+        return Board(self.shape, self.cells)
