@@ -1,2 +1,2 @@
 # BoardGames
-Applying machine algorithms to various board games
+Applying machine learning algorithms to various board games
