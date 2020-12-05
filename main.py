@@ -35,6 +35,7 @@ ab_pruning = ABPruning()
 # play_games(100, ab_pruning, minimax, TicTacToe())
 play_games(100, minimax, random, TicTacToe())
 play_games(100, random, minimax, TicTacToe())
+# play_game(minimax, human, TicTacToe(), True)
 
 # neural.games = 0
 # neural.train(2)

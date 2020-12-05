@@ -26,6 +26,7 @@ class TicTacToe(Board):
         assert self.cells[move] == Cell.Empty, "Cell is not empty"
 
         self.cells[move] = self.get_cell_for_turn()
+        self.moves_made += 1
         return
 
     def get_cell_for_turn(self):

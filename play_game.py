@@ -1,27 +1,24 @@
-from board.board import Result, Board
-from board.tictactoe import Cell
+from board.board import Result, PlayerTurn
 
 from tqdm import trange
 import time
 
-PRINT = False
 
-
-def play_game(x_player, o_player, board):
-    x_player.set_turn(1)
-    o_player.set_turn(2)
+def play_game(x_player, o_player, board, printBoard=False):
+    x_player.set_turn(PlayerTurn.One)
+    o_player.set_turn(PlayerTurn.Two)
 
     while not board.is_game_over():
         player = o_player
-        if board.whose_turn() == Cell.X:
+        if board.whose_turn() == PlayerTurn.One:
             player = x_player
 
         player.move(board)
 
-    if PRINT:
-        board.print()
+        if printBoard:
+            board.print()
 
-    if PRINT and board.is_game_over():
+    if printBoard:
         print(board.get_game_result().name)
 
     return board

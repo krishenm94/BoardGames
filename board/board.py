@@ -34,8 +34,7 @@ class Board(object):
         return
 
     def whose_turn(self):
-        non_zero_count = np.count_nonzero(self.cells)
-        return PlayerTurn.Two if (non_zero_count % 2 == 0) else PlayerTurn.One
+        return PlayerTurn.Two if self.moves_made % 2 == 1 else PlayerTurn.One
 
     def get_valid_moves(self):
         return [i for i in range(self.cells.size)
