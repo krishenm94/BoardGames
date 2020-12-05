@@ -36,11 +36,11 @@ class Board(object):
     def whose_turn(self):
         return PlayerTurn.Two if self.moves_made % 2 == 1 else PlayerTurn.One
 
-    def get_valid_moves(self):
+    def get_valid_moves(self, player_turn):
         return [i for i in range(self.cells.size)
                 if self.cells[i] == 0]
 
-    def get_invalid_moves(self):
+    def get_invalid_moves(self, player_turn):
         return [i for i in range(self.cells.size)
                 if self.cells[i] != 0]
 

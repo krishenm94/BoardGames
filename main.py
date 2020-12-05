@@ -8,6 +8,7 @@ from qneural import QNeural
 from abpruning import ABPruning
 from board.tictactoe import TicTacToe
 from torch.nn import MSELoss
+from board.mancala import Mancala
 
 human = Human()
 tree = Mcts()
@@ -33,9 +34,15 @@ ab_pruning = ABPruning()
 # play_games(100, random, ab_pruning, TicTacToe())
 # play_games(100, minimax, ab_pruning, TicTacToe())
 # play_games(100, ab_pruning, minimax, TicTacToe())
-play_games(1000, minimax, random, TicTacToe())
-play_games(1000, random, minimax, TicTacToe())
+# play_games(1000, minimax, random, TicTacToe())
+# play_games(1000, random, minimax, TicTacToe())
 # play_game(minimax, human, TicTacToe(), True)
+
+play_games(100, minimax, random, Mancala())
+play_games(100, random, minimax, Mancala())
+
+# play_game(random, human, Mancala(), True)
+# play_game(human, random, Mancala(), True)
 
 # neural.games = 0
 # neural.train(2)

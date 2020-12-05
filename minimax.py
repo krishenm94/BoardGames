@@ -20,7 +20,7 @@ class Minimax(Player):
         return move
 
     def get_move_values(self, board):
-        moves = board.get_valid_moves()
+        moves = board.get_valid_moves(self.turn)
         assert moves, "No valid moves"
 
         return [(move, self.get_move_value(move, board))
@@ -42,7 +42,7 @@ class Minimax(Player):
         if board.is_game_over():
             return board.get_game_result()
 
-        moves = board.get_valid_moves()
+        moves = board.get_valid_moves(self.turn)
 
         min_or_max = self.min_or_max(board)
 

@@ -10,4 +10,4 @@ class Random(Player):
         super(Random, self).__init__("Random")
 
     def get_best_move(self, board):
-        return random.choice(board.get_valid_moves())
+        return random.choice(board.get_valid_moves(self.turn))

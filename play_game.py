@@ -4,7 +4,7 @@ from tqdm import trange
 import time
 
 
-def play_game(x_player, o_player, board, printBoard=False):
+def play_game(x_player, o_player, board, print_board=False):
     x_player.set_turn(PlayerTurn.One)
     o_player.set_turn(PlayerTurn.Two)
 
@@ -15,11 +15,11 @@ def play_game(x_player, o_player, board, printBoard=False):
 
         player.move(board)
 
-        if printBoard:
+        if print_board:
             board.print()
 
-    if printBoard:
-        print(board.get_game_result().name)
+    if print_board:
+        print(board.get_game_result())
 
     return board
 

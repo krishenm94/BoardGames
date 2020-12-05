@@ -34,11 +34,11 @@ class TicTacToe(Board):
         else:
             return Cell.O
 
-    def get_valid_moves(self):
+    def get_valid_moves(self, player_turn):
         return [i for i in range(self.cells.size)
                 if self.cells[i] == Cell.Empty]
 
-    def get_invalid_moves(self):
+    def get_invalid_moves(self, player_turn):
         return [i for i in range(self.cells.size)
                 if self.cells[i] != Cell.Empty]
 

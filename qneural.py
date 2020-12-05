@@ -81,7 +81,7 @@ class QNeural(Player):
         return net(net_input)
 
     def filter_output(self, net_output, board):
-        valid_moves = board.get_valid_moves()
+        valid_moves = board.get_valid_moves(self.turn)
         valid_output_move_pairs = []
         for move in valid_moves:
             valid_output_move_pairs.append((move, net_output[move].item()))
@@ -158,7 +158,7 @@ class QNeural(Player):
         if epsilon > 0:
             random_value_from_0_to_1 = np.random.uniform()
             if random_value_from_0_to_1 < epsilon:
-                return random.choice(board.get_valid_moves())
+                return random.choice(board.get_valid_moves(self.turn))
 
         net_output = self.get_q_values(board, self.online_net)
         valid_move_value_pairs = self.filter_output(net_output, board)

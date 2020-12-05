@@ -18,7 +18,7 @@ class Mancala(Board):
             self.cells[2 * COLS - 1] = 0
 
     def execute_turn(self, move):
-        assert self.cells[move] == 0, "Cell is empty"
+        assert self.cells[move] != 0, "Cell is empty"
         assert move != COLS - 1 and move != 2 * COLS - 1, "Cell is capture pit"
 
         seeds = self.cells[move]
@@ -26,7 +26,7 @@ class Mancala(Board):
 
         next_cell_index = move
         while seeds > 0:
-            next_cell_index = (move + 1) % (2 * COLS)
+            next_cell_index = (next_cell_index + 1) % (2 * COLS)
             if next_cell_index == COLS - 1 and self.whose_turn() == PlayerTurn.Two or \
                     next_cell_index == 2 * COLS - 1 and self.whose_turn() == PlayerTurn.One:
                 continue
@@ -37,13 +37,17 @@ class Mancala(Board):
         self.moves_made += 1
         return
 
-    def get_valid_moves(self):
-        return [i for i in range(self.cells.size)
-                if self.cells[i] > 0 and i != COLS - 1 and i != 2 * COLS - 1]
+    def get_valid_moves(self, player_turn):
+        assert 0 < player_turn < 3, "Invalid player turn."
 
-    def get_invalid_moves(self):
-        return [i for i in range(self.cells.size)
-                if self.cells[i] == 0 or i == COLS - 1 or i == 2 * COLS - 1]
+        return [COLS * (player_turn - 1) + i for i in range(COLS - 1)
+                if self.cells[i] > 0]
+
+    def get_invalid_moves(self, player_turn):
+        assert 0 < player_turn < 3, "Invalid player turn."
+
+        return [COLS * (player_turn%2+1) + i for i in range(COLS - 1)
+                if self.cells[i] == 0]
 
     def is_move_valid(self, move):
         if move > (self.cells.size - 1) or move < 0 or \

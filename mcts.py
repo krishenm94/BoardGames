@@ -76,7 +76,7 @@ class Mcts(Player):
 
     def get_move_child_node_pairs(self, board):
         return [(move, self.get_child_node(move, board))
-                for move in board.get_valid_moves()]
+                for move in board.get_valid_moves(self.turn)]
 
     def get_child_node(self, move, board):
         new_board = board.simulate_turn(move)

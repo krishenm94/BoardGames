@@ -27,7 +27,7 @@ class QLearning(Player):
             self.cache = Cache1()
 
         def get_values(self, board):
-            moves = board.get_valid_moves()
+            moves = board.get_valid_moves(self.turn)
             q_values = [self.get_value(board, move) for move in moves]
 
             return dict(zip(moves, q_values))
@@ -75,7 +75,7 @@ class QLearning(Player):
         if epsilon > 0:
             random_value_from_0_to_1 = np.random.uniform()
             if random_value_from_0_to_1 < epsilon:
-                return random.choice(board.get_valid_moves())
+                return random.choice(board.get_valid_moves(self.turn))
 
         move_value_pairs = self.get_move_average_value_pairs(board)
 
