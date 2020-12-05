@@ -94,4 +94,6 @@ class TicTacToe(Board):
                 + [cells_2d.diagonal()])
 
     def copy(self):
-        return TicTacToe(self.cells)
+        new_board = TicTacToe(self.cells)
+        new_board.moves_made = self.moves_made
+        return new_board

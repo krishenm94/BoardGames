@@ -84,4 +84,6 @@ class Board(object):
         return Result.Incomplete
 
     def copy(self):
-        return Board(self.shape, self.cells)
+        new_board = Board(self.shape, self.cells)
+        new_board.moves_made = self.moves_made
+        return new_board
