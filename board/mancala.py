@@ -24,15 +24,34 @@ class Mancala(Board):
         seeds = self.cells[move]
         self.cells[move] = 0
 
-        next_cell_index = move
+        next_index = move
         while seeds > 0:
-            next_cell_index = (next_cell_index + 1) % (2 * COLS)
-            if next_cell_index == COLS - 1 and self.whose_turn() == PlayerTurn.Two or \
-                    next_cell_index == 2 * COLS - 1 and self.whose_turn() == PlayerTurn.One:
+            next_index = (next_index + 1) % (2 * COLS)
+
+            # Skip pit if it's the opponent's capture pit
+            if next_index == COLS - 1 and self.whose_turn() == PlayerTurn.Two or \
+                    next_index == 2 * COLS - 1 and self.whose_turn() == PlayerTurn.One:
                 continue
 
-            self.cells[next_cell_index] += 1
+            self.cells[next_index] += 1
             seeds -= 1
+
+        # Capture opposite pit if last seed ends in an empty pit on player's side
+        if self.cells[next_index] == 1:
+
+            if self.whose_turn() == PlayerTurn.One and -1 < next_index < COLS-1:
+
+                opposite_index = 2 * COLS - 2 - next_index
+                self.cells[COLS - 1] += self.cells[next_index] + self.cells[opposite_index]
+                self.cells[next_index] = 0
+                self.cells[opposite_index] = 0
+
+            elif self.whose_turn == PlayerTurn.Two and COLS-1 < next_index < 2*COLS-1:
+
+                opposite_index = COLS * 2 - 2 - next_index
+                self.cells[2 * COLS - 1] += self.cells[next_index] + self.cells[opposite_index]
+                self.cells[next_index] = 0
+                self.cells[opposite_index] = 0
 
         self.moves_made += 1
         return
@@ -46,7 +65,7 @@ class Mancala(Board):
     def get_invalid_moves(self, player_turn):
         assert 0 < player_turn < 3, "Invalid player turn."
 
-        return [COLS * (player_turn%2+1) + i for i in range(COLS - 1)
+        return [COLS * (player_turn % 2 + 1) + i for i in range(COLS - 1)
                 if self.cells[i] == 0]
 
     def is_move_valid(self, move):
@@ -64,15 +83,8 @@ class Mancala(Board):
         assert seeds[PlayerTurn.One] != 0 or seeds[PlayerTurn.Two] != 0, \
             "Both players' non-capture pits are empty. Impossible position."
 
-        if seeds[PlayerTurn.One] == 0:
-            seeds[PlayerTurn.One] = self.cells[COLS - 1] + seeds[PlayerTurn.Two]
-            seeds[PlayerTurn.Two] = self.cells[2 * COLS - 1]
-        elif seeds[PlayerTurn.Two] == 0:
-            seeds[PlayerTurn.Two] = self.cells[2 * COLS - 1] + seeds[PlayerTurn.One]
-            seeds[PlayerTurn.One] = self.cells[COLS - 1]
-        else:
-            seeds[PlayerTurn.One] = self.cells[COLS - 1]
-            seeds[PlayerTurn.Two] = self.cells[2 * COLS - 1]
+        seeds[PlayerTurn.One] += self.cells[COLS - 1]
+        seeds[PlayerTurn.Two] += self.cells[2 * COLS - 1]
 
         if seeds[PlayerTurn.One] > seeds[PlayerTurn.Two]:
             return seeds[PlayerTurn.One]

@@ -38,10 +38,10 @@ ab_pruning = ABPruning()
 # play_games(1000, random, minimax, TicTacToe())
 # play_game(minimax, human, TicTacToe(), True)
 
-play_games(100, minimax, random, Mancala())
-play_games(100, random, minimax, Mancala())
+# play_games(100, minimax, random, Mancala())
+# play_games(100, random, minimax, Mancala())
 
-# play_game(random, human, Mancala(), True)
+play_game(random, human, Mancala(), True)
 # play_game(human, random, Mancala(), True)
 
 # neural.games = 0
