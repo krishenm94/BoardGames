@@ -100,8 +100,7 @@ class QNeural(Player):
                 self.record(results_filepath)
 
             if (game + 1) % 10 == 0:
-                self.target_net.load_state_dict(self.online_net.state_dict())
-                self.target_net.eval()
+                self.update_target_nets()
 
     def record(self, path):
         with open(path, mode='a', newline='') as file:
@@ -114,15 +113,17 @@ class QNeural(Player):
                     Key.Wins.name: self.wins,
                     Key.Draws.name: self.draws,
                     Key.Losses.name: self.losses,
-                    Key.Net.name: self.online_net.state_dict(),
-                    Key.Optimizer.name: self.optimizer.state_dict()},
+                    Key.Net1.name: self.online_nets[1].state_dict(),
+                    Key.Net2.name: self.online_nets[2].state_dict(),
+                    Key.Optimizer1.name: self.optimizers[1].state_dict(),
+                    Key.Optimizer2.name: self.optimizers[2].state_dict()},
                    '_'.join([CHECKPOINT_PATH, str(int(time())), str(self.games)]))
 
     def play_training_game(self, board, epsilon):
-        move_history = deque()
+        move_history = {1: deque(), 2: deque}
 
         while not board.is_game_over():
-            board = self.play_training_move(board, epsilon, move_history)
+            board = self.play_training_move(board, epsilon, move_history[board.whose_turn()])
 
         self.post_training_game_update(board, move_history)
 
@@ -135,7 +136,7 @@ class QNeural(Player):
         if epsilon > 0:
             random_value_from_0_to_1 = np.random.uniform()
             if random_value_from_0_to_1 < epsilon:
-                return random.choice(board.get_valid_moves(self.turn))
+                return random.choice(board.get_valid_moves(board.whose_turn()))
 
         net_output = self.get_q_values(board, self.online_nets[board.whose_turn()])
         valid_move_value_pairs = self.filter_output(net_output, board)
@@ -145,18 +146,19 @@ class QNeural(Player):
     def post_training_game_update(self, board, move_history):
         end_state_value = self.get_end_state_value(board)
 
-        # Initial loss update
-        next_board, move = move_history[0]
-        self.backpropagate(next_board, move, end_state_value)
+        for turn in [1, 2]:
+            # Initial loss update
+            next_board, move = move_history[turn][0]
+            self.backpropagate(next_board, turn, move, end_state_value)
 
-        for board, move in list(move_history)[1:]:
-            with torch.no_grad():
-                # next_q_values = self.get_q_values(next_board, self.online_net) # QN
-                next_q_values = self.get_q_values(next_board, self.target_net)  # Double QN
-                max_next_q_value = torch.max(next_q_values).item()
+            for board, move in list(move_history)[1:]:
+                with torch.no_grad():
+                    # next_q_values = self.get_q_values(next_board, self.online_net) # QN
+                    next_q_values = self.get_q_values(next_board, self.target_nets[turn])  # Double QN
+                    max_next_q_value = torch.max(next_q_values).item()
 
-            self.backpropagate(board, move, max_next_q_value * DISCOUNT_FACTOR)
-            next_board = board
+                self.backpropagate(board, turn, move, max_next_q_value * DISCOUNT_FACTOR)
+                next_board = board
 
     def backpropagate(self, board, turn, move, target_value):
         self.optimizers[turn].zero_grad()
