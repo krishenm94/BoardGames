@@ -41,7 +41,9 @@ ab_pruning = ABPruning()
 # play_games(100, minimax, random, Mancala())
 # play_games(100, random, minimax, Mancala())
 
-play_game(random, human, Mancala(), True)
+play_game(minimax, random, Mancala(), True)
+
+# play_game(Random(), random, Mancala(), True)
 # play_game(human, random, Mancala(), True)
 
 # neural.games = 0

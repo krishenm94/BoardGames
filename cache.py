@@ -11,17 +11,20 @@ TRANSFORMS = [Transform([]),
               Transform([np.rot90, np.flipud]),
               Transform([np.rot90, np.fliplr])]
 
+IDENTITY = [Transform([])]
+
 
 class Cache1(object):
     """docstring for Cache1"""
 
-    def __init__(self):
+    def __init__(self, transforms=TRANSFORMS):
         super(Cache1, self).__init__()
 
         self.boards = {}
+        self.transforms = transforms
 
     def set(self, board, value):
-        for transform in TRANSFORMS:
+        for transform in self.transforms:
             cells_2d = transform.execute(board.cells_2d())
             self.boards[cells_2d.tobytes()] = value
 

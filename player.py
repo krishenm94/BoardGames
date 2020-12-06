@@ -21,5 +21,6 @@ class Player(object):
         move = self.get_best_move(board)
         board.execute_turn(move)
 
+
     def get_best_move(self, board):
         raise NotImplementedError

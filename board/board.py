@@ -61,7 +61,9 @@ class Board(object):
                 print(" %s " % self.cell_to_char(cell), end="|")
 
             if row < rows - 1:
-                print("\n-------------")
+                print("\n-")
+                for _ in range(cols):
+                    print("----")
 
         print('\n')
 

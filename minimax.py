@@ -1,5 +1,5 @@
 from player import Player
-from cache import Cache1
+from cache import Cache1, IDENTITY
 
 
 class Minimax(Player):
@@ -7,7 +7,7 @@ class Minimax(Player):
 
     def __init__(self):
         super(Minimax, self).__init__("Minimax")
-        self.cache = Cache1()
+        self.cache = Cache1(IDENTITY)
 
     def get_best_move(self, board):
         move_value_pairs = self.get_move_values(board)
