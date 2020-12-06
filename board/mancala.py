@@ -53,10 +53,12 @@ class Mancala(Board):
                 self.cells[next_index] = 0
                 self.cells[opposite_index] = 0
 
+        # Get extra turn if last pit was capture pit
         if next_index == COLS - 1 and self.whose_turn() == 1 or \
                 next_index == 2 * COLS - 1 and self.whose_turn() == 2:
-            self.moves_made += 1
-            
+            return
+
+        self.moves_made += 1
         return
 
     def get_valid_moves(self, player_turn):

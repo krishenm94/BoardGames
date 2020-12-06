@@ -25,17 +25,14 @@ ab_pruning = ABPruning()
 # o_learning = QLearning()
 #
 #
-neural = QNeural(MSELoss())
+# neural = QNeural(MSELoss())
 
-neural.load("./neural_checkpoints/checkpoint_1607248678_200000")
+#neural.load("./neural_checkpoints/checkpoint_1607248678_200000")
 # neural.train(1, Mancala(), Random(), 200000)
 # neural.load("./neural_checkpoints/checkpoint_1607242725_100000") # TicTacToe
-play_game(neural, human, Mancala(), True)
+#play_game(neural, human, Mancala(), True)
 # play_games(1000, neural, random, Mancala())
 # play_games(1000, neural, minimax)
-
-# play_game(human, ab_pruning)
-# play_game(ab_pruning, human)
 
 # play_games(1000, ab_pruning, random, TicTacToe())
 # play_games(1000, random, ab_pruning, TicTacToe())
@@ -48,10 +45,11 @@ play_game(neural, human, Mancala(), True)
 
 # play_games(10, minimax, random, Mancala())
 # play_games(10, random, minimax, Mancala())
-# play_games(1000, ab_pruning, random, Mancala())
-# play_games(1000, random, ab_pruning, Mancala())
+play_games(50, ab_pruning, random, Mancala())
+play_games(50, random, ab_pruning, Mancala())
 
-#play_game(minimax, random, Mancala(), True)
+
+# play_game(human, ab_pruning, Mancala(), True)
 # play_game(human, ab_pruning, Mancala(), True)
 
 # neural.games = 0

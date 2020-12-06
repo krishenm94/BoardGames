@@ -5,6 +5,7 @@ import time
 
 LOOKAHEAD_LIMIT = 10
 
+
 class ABPruning(Player):
     """docstring for ABPruning"""
 

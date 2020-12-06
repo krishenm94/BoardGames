@@ -1,5 +1,5 @@
 from player import Player
-from board.board import PlayerTurn, Result
+from board.board import Result
 from random_player import Random
 from net import *
 
@@ -121,7 +121,7 @@ class QNeural(Player):
 
         while not board.is_game_over():
             player = o_player
-            if board.whose_turn() == PlayerTurn.One:
+            if board.whose_turn() == 1:
                 player = x_player
 
             if player is self:

@@ -1,6 +1,6 @@
 from player import Player
 from cache import Cache1
-from board.board import Board, Result, PlayerTurn
+from board.board import Board, Result
 from random_player import Random
 
 import numpy as np
@@ -115,7 +115,7 @@ class QLearning(Player):
 
         while not board.is_game_over():
             player = player_two
-            if board.whose_turn() == PlayerTurn.One:
+            if board.whose_turn() == 1:
                 player = player_one
 
             if player is self:

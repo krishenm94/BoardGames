@@ -1,4 +1,4 @@
-from board.board import Board, Result, PlayerTurn
+from board.board import Board, Result
 
 from enum import IntEnum
 import numpy as np
@@ -29,7 +29,7 @@ class TicTacToe(Board):
         return
 
     def get_cell_for_turn(self):
-        if self.whose_turn() == PlayerTurn.One:
+        if self.whose_turn() == 1:
             return Cell.X
         else:
             return Cell.O
