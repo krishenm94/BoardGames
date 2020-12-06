@@ -87,7 +87,7 @@ class QNeural(Player):
             valid_output_move_pairs.append((move, net_output[move].item()))
         return valid_output_move_pairs
 
-    def train(self, turn, opponent=Random(), total_games=TRAINING_GAMES):
+    def train(self, turn, board, opponent=Random(), total_games=TRAINING_GAMES):
         total_games = TRAINING_GAMES - self.games
         print(f"Training {self.name} for {total_games} games.", flush=True)
         print(f"Starting game number: {self.games}")
@@ -100,7 +100,7 @@ class QNeural(Player):
         sleep(0.05)  # Ensures no collisions between tqdm prints and main prints
         for game in trange(total_games):
             self.games += 1
-            self.play_training_game(opponent, epsilon)
+            self.play_training_game(board, opponent, epsilon)
             # Decrease exploration probability
             if (game + 1) % (total_games / 20) == 0:
                 epsilon = max(0, epsilon - 0.05)
@@ -131,9 +131,8 @@ class QNeural(Player):
                     Key.Optimizer.name: self.optimizer.state_dict()},
                    '_'.join([CHECKPOINT_PATH, str(int(time())), str(self.games)]))
 
-    def play_training_game(self, opponent, epsilon):
+    def play_training_game(self, board, opponent, epsilon):
         move_history = deque()
-        board = Board()
         x_player = self if self.turn == 1 else opponent
         o_player = self if self.turn == 2 else opponent
 
@@ -189,7 +188,7 @@ class QNeural(Player):
 
         target_output = output.clone().detach()
         target_output[move] = target_value
-        for move in board.get_invalid_moves():
+        for move in board.get_invalid_moves(self.turn):
             target_output[move] = 0
 
         loss = self.loss_function(output, target_output)
@@ -206,9 +205,9 @@ class QNeural(Player):
             self.draws += 1
             return 1
 
-        if game_result == Result.X_Wins:
+        if game_result > 0:
             result = 1 if self.turn == 1 else 0
-        elif game_result == Result.O_Wins:
+        elif game_result < 0:
             result = 1 if self.turn == 2 else 0
 
         if result == 1:

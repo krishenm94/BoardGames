@@ -77,7 +77,7 @@ class TicTacToe(Board):
         if min_value == -self.shape[0]:
             return Result.Two_Wins  # O player
 
-        if not self.get_valid_moves():
+        if not self.get_valid_moves(1):
             return Result.Draw
 
         return Result.Incomplete

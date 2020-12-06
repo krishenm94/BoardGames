@@ -38,7 +38,12 @@ def play_games(total_games, x_player, o_player, board):
     for _ in trange(total_games):
         end_of_game = (play_game(x_player, o_player, board.copy()))
         result = end_of_game.get_game_result()
-        results[result] += 1
+        if result > 0:
+            results[Result.One_Wins] += 1
+        elif result < 0:
+            results[Result.Two_Wins] += 1
+        else:
+            results[Result.Draw] += 1
 
     x_wins_percent = results[Result.One_Wins] / total_games * 100
     o_wins_percent = results[Result.Two_Wins] / total_games * 100

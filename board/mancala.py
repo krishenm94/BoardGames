@@ -46,7 +46,7 @@ class Mancala(Board):
                 self.cells[next_index] = 0
                 self.cells[opposite_index] = 0
 
-            elif self.whose_turn == PlayerTurn.Two and COLS - 1 < next_index < 2 * COLS - 1:
+            elif self.whose_turn() == PlayerTurn.Two and COLS - 1 < next_index < 2 * COLS - 1:
 
                 opposite_index = COLS * 2 - 2 - next_index
                 self.cells[2 * COLS - 1] += self.cells[next_index] + self.cells[opposite_index]
@@ -80,14 +80,10 @@ class Mancala(Board):
     def get_game_result(self):
         seeds = self.get_uncaptured_seeds()
 
-        assert seeds[PlayerTurn.One] != 0 or seeds[PlayerTurn.Two] != 0, \
-            "Both players' non-capture pits are empty. Impossible position."
-
         seeds[PlayerTurn.One] += self.cells[COLS - 1]
         seeds[PlayerTurn.Two] += self.cells[2 * COLS - 1]
 
         return seeds[PlayerTurn.One] - seeds[PlayerTurn.Two]
-
 
     def get_uncaptured_seeds(self):
         seeds = {PlayerTurn.One: 0, PlayerTurn.Two: 0}
@@ -100,9 +96,6 @@ class Mancala(Board):
 
     def is_game_over(self):
         seeds = self.get_uncaptured_seeds()
-
-        assert seeds[PlayerTurn.One] != 0 or seeds[PlayerTurn.Two] != 0, \
-            "Both players' non-capture pits are empty. Impossible position."
 
         return True if seeds[PlayerTurn.One] == 0 or seeds[PlayerTurn.Two] == 0 \
             else False

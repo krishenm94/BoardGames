@@ -89,6 +89,7 @@ class Mcts(Player):
 
     def train(self, board, playouts=PLAYOUTS):
         print(f"Performing {playouts} playouts.")
+        self.turn = 1
 
         sleep(0.05)
         for _ in trange(playouts):
@@ -121,9 +122,9 @@ class Mcts(Player):
                 raise ValueError("Illegal game state.")
 
     def is_win(self, turn, result):
-        return turn == PlayerTurn.One and result == Result.Two_Wins or \
-               turn == PlayerTurn.Two and result == Result.One_Wins
+        return turn == PlayerTurn.One and result < 0 or \
+               turn == PlayerTurn.Two and result > 0
 
     def is_loss(self, turn, result):
-        return turn == PlayerTurn.One and result == Result.One_Wins or \
-               turn == PlayerTurn.Two and result == Result.Two_Wins
+        return turn == PlayerTurn.One and result > 0 or \
+               turn == PlayerTurn.Two and result < 0
