@@ -65,8 +65,8 @@ class Mancala(Board):
     def get_invalid_moves(self, player_turn):
         assert 0 < player_turn < 3, "Invalid player turn."
 
-        return [COLS * (player_turn % 2 + 1) + i for i in range(COLS - 1)
-                if self.cells[COLS * (player_turn % 2 + 1) + i] == 0]
+        return [COLS * (player_turn % 2) + i for i in range(COLS - 1)
+                if self.cells[COLS * (player_turn % 2) + i] == 0]
 
     def is_move_valid(self, move):
         if move > (self.cells.size - 1) or move < 0 or \

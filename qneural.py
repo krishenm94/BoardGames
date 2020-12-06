@@ -1,5 +1,5 @@
 from player import Player
-from board.board import Board, PlayerTurn, Result
+from board.board import PlayerTurn, Result
 from random_player import Random
 
 import torch
@@ -41,8 +41,29 @@ def time_str():
 class QNeural(Player):
     """docstring for QNeural"""
 
-    class Net(nn.Module):
-        """"docstring for Net"""
+    class MancNet(nn.Module):
+        """" Mancala """
+
+        def __init__(self):
+            super(QNeural.Net, self).__init__()
+            self.d11 = nn.Linear(14, 36)
+            self.d12 = nn.Linear(36, 36)
+            self.d13 = nn.Linear(36, 36)
+            self.output = nn.Linear(36, 14)
+
+        def forward(self, x):
+            x = self.d11(x)
+            x = torch.relu(x)
+            x = self.d12(x)
+            x = torch.relu(x)
+            x = self.d13(x)
+            x = torch.relu(x)
+            x = self.output(x)
+            x = torch.sigmoid(x)
+            return x
+
+    class TTTNet(nn.Module):
+        """ Tic Tac Toe """
 
         def __init__(self):
             super(QNeural.Net, self).__init__()
@@ -64,13 +85,18 @@ class QNeural(Player):
 
         # print(f"Nets loaded on {cuda.get_device_name(0)}")
         # print(cuda.get_device_properties(0))
-        self.online_net = QNeural.Net()
-
-        self.target_net = QNeural.Net()
+        self.online_net = QNeural.MancNet()
+        self.target_net = QNeural.MancNet()
         self.target_net.load_state_dict(self.online_net.state_dict())
         self.target_net.eval()
-
         self.optimizer = torch.optim.SGD(self.online_net.parameters(), lr=0.1)
+
+        self.online_net_2 = QNeural.MancNet()
+        self.target_net_2 = QNeural.MancNet()
+        self.target_net_2.load_state_dict(self.online_net.state_dict())
+        self.target_net_2.eval()
+        self.optimizer_2 = torch.optim.SGD(self.online_net.parameters(), lr=0.1)
+
         self.loss_function = loss_function
 
     def get_best_move(self, board):
@@ -88,11 +114,13 @@ class QNeural(Player):
         return valid_output_move_pairs
 
     def train(self, turn, board, opponent=Random(), total_games=TRAINING_GAMES):
-        total_games = TRAINING_GAMES - self.games
+        total_games = total_games - self.games
+
         print(f"Training {self.name} for {total_games} games.", flush=True)
         print(f"Starting game number: {self.games}")
         results_filepath = '_'.join([RESULTS_LOG_PATH, str(int(time()))]) + CSV
         copyfile(RESULTS_LOG_PATH + CSV, results_filepath)
+
         self.turn = turn
         opponent.set_turn(self.turn % 2 + 1)
         epsilon = INITIAL_EPSILON
