@@ -3,7 +3,6 @@ from board.board import Result
 from net import *
 
 import torch
-from torch import nn
 import numpy as np
 from time import sleep
 from tqdm import trange
@@ -151,7 +150,7 @@ class QNeural(Player):
             next_board, move = move_history[turn][0]
             self.backpropagate(next_board, turn, move, end_state_value)
 
-            for board, move in list(move_history)[1:]:
+            for board, move in list(move_history[turn])[1:]:
                 with torch.no_grad():
                     # next_q_values = self.get_q_values(next_board, self.online_net) # QN
                     next_q_values = self.get_q_values(next_board, self.target_nets[turn])  # Double QN
