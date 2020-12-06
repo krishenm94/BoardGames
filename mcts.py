@@ -1,6 +1,6 @@
 from player import Player
 from cache import Cache1
-from board.board import Board, Result, PlayerTurn
+from board.board import Board, Result
 
 from math import sqrt, inf, log
 from tqdm import trange
@@ -122,9 +122,9 @@ class Mcts(Player):
                 raise ValueError("Illegal game state.")
 
     def is_win(self, turn, result):
-        return turn == PlayerTurn.One and result < 0 or \
-               turn == PlayerTurn.Two and result > 0
+        return turn == 1 and result < 0 or \
+               turn == 2 and result > 0
 
     def is_loss(self, turn, result):
-        return turn == PlayerTurn.One and result > 0 or \
-               turn == PlayerTurn.Two and result < 0
+        return turn == 1 and result > 0 or \
+               turn == 2 and result < 0

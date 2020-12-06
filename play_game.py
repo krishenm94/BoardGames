@@ -1,16 +1,16 @@
-from board.board import Result, PlayerTurn
+from board.board import Result
 
 from tqdm import trange
 import time
 
 
 def play_game(x_player, o_player, board, print_board=False):
-    x_player.set_turn(PlayerTurn.One)
-    o_player.set_turn(PlayerTurn.Two)
+    x_player.set_turn(1)
+    o_player.set_turn(2)
 
     while not board.is_game_over():
         player = o_player
-        if board.whose_turn() == PlayerTurn.One:
+        if board.whose_turn() == 1:
             player = x_player
 
         player.move(board)

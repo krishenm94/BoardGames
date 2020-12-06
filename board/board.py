@@ -2,11 +2,6 @@ from enum import IntEnum
 import numpy as np
 
 
-class PlayerTurn(IntEnum):
-    One = 1,
-    Two = 2
-
-
 class Result(IntEnum):
     One_Wins = 1
     Two_Wins = -1
@@ -34,7 +29,7 @@ class Board(object):
         return
 
     def whose_turn(self):
-        return PlayerTurn.Two if self.moves_made % 2 == 1 else PlayerTurn.One
+        return 2 if self.moves_made % 2 == 1 else 1
 
     def get_valid_moves(self, player_turn):
         return [i for i in range(self.cells.size)

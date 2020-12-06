@@ -1,4 +1,4 @@
-from board.board import Board, Result, PlayerTurn
+from board.board import Board
 
 import numpy as np
 
@@ -29,8 +29,8 @@ class Mancala(Board):
             next_index = (next_index + 1) % (2 * COLS)
 
             # Skip pit if it's the opponent's capture pit
-            if next_index == COLS - 1 and self.whose_turn() == PlayerTurn.Two or \
-                    next_index == 2 * COLS - 1 and self.whose_turn() == PlayerTurn.One:
+            if next_index == COLS - 1 and self.whose_turn() == 2 or \
+                    next_index == 2 * COLS - 1 and self.whose_turn() == 1:
                 continue
 
             self.cells[next_index] += 1
@@ -39,21 +39,24 @@ class Mancala(Board):
         # Capture opposite pit if last seed ends in an empty pit on player's side
         if self.cells[next_index] == 1:
 
-            if self.whose_turn() == PlayerTurn.One and -1 < next_index < COLS - 1:
+            if self.whose_turn() == 1 and -1 < next_index < COLS - 1:
 
                 opposite_index = 2 * COLS - 2 - next_index
                 self.cells[COLS - 1] += self.cells[next_index] + self.cells[opposite_index]
                 self.cells[next_index] = 0
                 self.cells[opposite_index] = 0
 
-            elif self.whose_turn() == PlayerTurn.Two and COLS - 1 < next_index < 2 * COLS - 1:
+            elif self.whose_turn() == 2 and COLS - 1 < next_index < 2 * COLS - 1:
 
                 opposite_index = COLS * 2 - 2 - next_index
                 self.cells[2 * COLS - 1] += self.cells[next_index] + self.cells[opposite_index]
                 self.cells[next_index] = 0
                 self.cells[opposite_index] = 0
 
-        self.moves_made += 1
+        if next_index == COLS - 1 and self.whose_turn() == 1 or \
+                next_index == 2 * COLS - 1 and self.whose_turn() == 2:
+            self.moves_made += 1
+            
         return
 
     def get_valid_moves(self, player_turn):
@@ -71,8 +74,8 @@ class Mancala(Board):
     def is_move_valid(self, move):
         if move > (self.cells.size - 1) or move < 0 or \
                 self.cells[move] == 0 or \
-                move == COLS - 1 and self.whose_turn() == PlayerTurn.Two or \
-                move == 2 * COLS - 1 and self.whose_turn() == PlayerTurn.One:
+                move == COLS - 1 and self.whose_turn() == 2 or \
+                move == 2 * COLS - 1 and self.whose_turn() == 1:
             return False
 
         return True
@@ -80,24 +83,24 @@ class Mancala(Board):
     def get_game_result(self):
         seeds = self.get_uncaptured_seeds()
 
-        seeds[PlayerTurn.One] += self.cells[COLS - 1]
-        seeds[PlayerTurn.Two] += self.cells[2 * COLS - 1]
+        seeds[1] += self.cells[COLS - 1]
+        seeds[2] += self.cells[2 * COLS - 1]
 
-        return seeds[PlayerTurn.One] - seeds[PlayerTurn.Two]
+        return seeds[1] - seeds[2]
 
     def get_uncaptured_seeds(self):
-        seeds = {PlayerTurn.One: 0, PlayerTurn.Two: 0}
+        seeds = {1: 0, 2: 0}
 
         for i in range(COLS - 1):
-            seeds[PlayerTurn.One] += self.cells[i]
-            seeds[PlayerTurn.Two] += self.cells[i + COLS]
+            seeds[1] += self.cells[i]
+            seeds[2] += self.cells[i + COLS]
 
         return seeds
 
     def is_game_over(self):
         seeds = self.get_uncaptured_seeds()
 
-        return True if seeds[PlayerTurn.One] == 0 or seeds[PlayerTurn.Two] == 0 \
+        return True if seeds[1] == 0 or seeds[2] == 0 \
             else False
 
     def copy(self):
