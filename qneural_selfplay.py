@@ -143,9 +143,8 @@ class QNeural(Player):
         return max(valid_move_value_pairs, key=lambda pair: pair[1])[0]
 
     def post_training_game_update(self, board, move_history):
-        end_state_value = self.get_end_state_value(board)
-
         for turn in [1, 2]:
+            end_state_value = self.get_end_state_value(turn, board)
             # Initial loss update
             next_board, move = move_history[turn][0]
             self.backpropagate(next_board, turn, move, end_state_value)
@@ -175,7 +174,7 @@ class QNeural(Player):
 
         self.optimizers[turn].step()
 
-    def get_end_state_value(self, board):
+    def get_end_state_value(self, turn, board):
         assert board.is_game_over(), "Game is not over"
 
         game_result = board.get_game_result()
@@ -185,9 +184,9 @@ class QNeural(Player):
             return 1
 
         if game_result > 0:
-            result = 1 if self.turn == 1 else 0
+            result = 1 if turn == 1 else 0
         elif game_result < 0:
-            result = 1 if self.turn == 2 else 0
+            result = 1 if turn == 2 else 0
 
         if result == 1:
             self.wins += 1
